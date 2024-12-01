@@ -1,20 +1,29 @@
 package src.controller;
 
-import java.util.Arrays;
+import src.service.FileService;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Day1Launcher {
 
-
+    public static List<Integer> leftList = new ArrayList<>();
+    public static List<Integer> rightList = new ArrayList<>();
 
     public static void main(String[] args) {
-        System.out.println(computeTotalDistance());
+        List<String> inputLines = FileService.readFileLines("AdventOfCode/2024/resources/day1puzzle1.txt");
+
+        for (String inputLine : inputLines) {
+            String string[] = inputLine.split(" ");
+            leftList.add(Integer.parseInt(string[0]));
+            rightList.add(Integer.parseInt(string[3]));
+        }
+        System.out.println(computeTotalDistance(leftList, rightList));
     }
 
-    public static Long computeTotalDistance() {
-        List<Integer> leftList = Arrays.asList(3, 4, 2, 1, 3, 3);
-        List<Integer> rightList = Arrays.asList(4, 3, 5, 3, 9, 3);
+
+    public static Long computeTotalDistance(List<Integer> leftList, List<Integer> rightList) {
 
         Collections.sort(leftList);
         Collections.sort(rightList);
