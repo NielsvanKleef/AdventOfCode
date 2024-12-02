@@ -25,25 +25,31 @@ public class Day2Launcher {
             boolean increasing = levels[levels.length - 1] - levels[0] > 0;
 
             boolean isReportSafe = true;
-            for (int index = 0; index < levels.length - 1; index++) {
-                if (increasing) {
-                    int increase = levels[index + 1] - levels[index];
 
-                    if (increase < 1 || increase > 3) {
-                        isReportSafe = false;
-                    }
-                } else {
-                    int decrease = levels[index] - levels[index + 1];
+            isReportSafe = isReportSafe(levels, increasing, isReportSafe);
 
-                    if (decrease < 1 || decrease > 3) {
-                        isReportSafe = false;
-                    }
-                }
-            }
             if (isReportSafe) {
                 amountOfSafeReports++;
             }
+
         }
         return amountOfSafeReports;
+    }
+
+    private static boolean isReportSafe(int[] levels, boolean increasing, boolean isReportSafe) {
+        for (int index = 0; index < levels.length - 1; index++) {
+            int increment;
+
+            if (increasing) {
+                increment = levels[index + 1] - levels[index];
+            } else {
+                increment = levels[index] - levels[index + 1];
+            }
+
+            if (increment < 1 || increment > 3) {
+                isReportSafe = false;
+            }
+        }
+        return isReportSafe;
     }
 }
