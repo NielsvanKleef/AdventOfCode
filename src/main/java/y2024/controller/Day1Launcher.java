@@ -1,6 +1,6 @@
-package src.controller;
+package y2024.controller;
 
-import src.service.FileService;
+import y2024.service.FileService;
 
 import java.util.*;
 
@@ -10,7 +10,7 @@ public class Day1Launcher {
     public static List<Integer> rightList = new ArrayList<>();
 
     public static void main(String[] args) {
-        List<String> inputLines = FileService.readFileLines("AdventOfCode/2024/resources/day1puzzle1.txt");
+        List<String> inputLines = FileService.readFileLines("AdventOfCode/src/main/resources/day1puzzle1.txt");
 
         for (String inputLine : inputLines) {
             String[] string = inputLine.split(" ");
