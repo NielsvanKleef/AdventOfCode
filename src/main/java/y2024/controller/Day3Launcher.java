@@ -9,26 +9,28 @@ import java.util.regex.Pattern;
 public class Day3Launcher {
     static String inputString = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))";
     static String inputString2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
+    static boolean enabled = true;
 
     public static void main(String[] args) {
         List<String> inputLines = FileService.readFileLines("AdventOfCode/src/main/resources/d3p1.txt");
 
         int sumOfMultiplications = 0;
+        int sumOfEnabledMultiplications = 0;
 
         for (String inputLine : inputLines) {
-             sumOfMultiplications += calculateSumOfLine(inputLine);
+            sumOfMultiplications += calculateSumOfLine(inputLine);
+            sumOfEnabledMultiplications += calculateDoOrDontSumOfLine(inputLine);
         }
 
         System.out.println(sumOfMultiplications);
-
-        System.out.println(calculateDoOrDontSumOfLine(inputString2));
+        System.out.println();
+        System.out.println(sumOfEnabledMultiplications);
     }
 
     private static int calculateDoOrDontSumOfLine(String line) {
         int sumOfMultiplications = 0;
-        boolean enabled = true;
 
-        Pattern pattern = Pattern.compile("(don't\\(\\))|(do\\(\\))|mul\\((\\d),(\\d)\\)");
+        Pattern pattern = Pattern.compile("(don't\\(\\))|(do\\(\\))|mul\\((\\d+),(\\d+)\\)");
         Matcher matcher = pattern.matcher(line);
 
         while (matcher.find()) {
@@ -36,8 +38,7 @@ public class Day3Launcher {
                 enabled = false;
             } else if (matcher.group(2) != null) {
                 enabled = true;
-            }
-            if (enabled && matcher.group(3) != null) {
+            } else if (enabled) {
                 sumOfMultiplications += (Integer.parseInt(matcher.group(3)) * Integer.parseInt(matcher.group(4)));
             }
         }
