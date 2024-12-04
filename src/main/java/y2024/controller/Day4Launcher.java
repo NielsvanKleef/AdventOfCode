@@ -10,10 +10,10 @@ public class Day4Launcher {
     public static void main(String[] args) {
         fillWordSearchMap();
         int xmasOccurences = 0;
+        int crossOccurences = 0;
 
         for (int row = 0; row < wordSearchMap.size(); row++) {
             for (int col = 0; col < wordSearchMap.get(0).size(); col++) {
-                //todo: markeren als een letter niet meedoet met een xmas?
                 if (wordSearchMap.get(row).get(col).equals("X")) {
                     if (leftToRight(row, col)) {
                         xmasOccurences++;
@@ -47,14 +47,49 @@ public class Day4Launcher {
                         xmasOccurences++;
                     }
                 }
+                //altijd van linksboven naar rechtsonder bekijken op M of S, anders tel ik dingen dubbel.
+                if (wordSearchMap.get(row).get(col).equals("M")) {
+                    if (checkMCross(row, col)) {
+                        crossOccurences++;
+                    }
+                } else if (wordSearchMap.get(row).get(col).equals("S")) {
+                    if (checkSCross(row, col)) {
+                        crossOccurences++;
+                    }
+                }
+
             }
         }
         System.out.println(xmasOccurences);
+        System.out.println(crossOccurences);
     }
 
     private static String getPuzzleLetter(int row, int col) {
         return wordSearchMap.get(row).get(col);
     }
+
+    private static boolean checkMCross(int row, int col) {
+        // always starting upper left.
+        if (row + 2 >= wordSearchMap.size() || col + 2 >= wordSearchMap.get(row).size()) {
+            return false;
+        }
+
+        return checkMAS(row, col, row + 1, col + 1, row + 2, col + 2) // NW -> SE
+                && (checkMAS(row + 2, col, row + 1, col + 1, row, col + 2)// SW -> NE (option 1)
+                || (checkMAS(row, col + 2, row + 1, col + 1, row + 2, col)));  // NE -> SW optionn 2
+    }
+
+    private static boolean checkSCross(int row, int col) {
+        // always starting upper left.
+        if (row + 2 >= wordSearchMap.size() || col + 2 >= wordSearchMap.get(row).size()) {
+            return false;
+        }
+
+        return checkMAS(row + 2, col + 2, row + 1, col + 1, row, col) // SE -> NW
+                && (checkMAS(row + 2, col, row + 1, col + 1, row, col + 2)// SW -> NE (option 1)
+                || (checkMAS(row, col + 2, row + 1, col + 1, row + 2, col)));  // NE -> SW optionn 2
+    }
+
 
     private static boolean leftToRight(int row, int col) {
         if (col + 3 > wordSearchMap.get(row).size()) {
