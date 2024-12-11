@@ -11,20 +11,33 @@ public class Day5Launcher {
     public static void main(String[] args) {
         readInputAndFillMaps();
         long answer = 0L;
+        long answer2 = 0L;
 
+        Comparator<Integer> comperator = getOrderingRuleComparator();
 
         for (List<Integer> update  : updatesMap.values()) {
             if (update.stream().allMatch(nr -> isNumberOrderedCorrectly(nr, update))) {
-                answer += update.get(update.size() / 2 );
+                answer += update.get(update.size() / 2);
+            } else {
+                Collections.sort(update, comperator);
+                answer2 += update.get(update.size() / 2);
             }
-
-            // index 0 -> size update -> staat index op goede plek (nooit rechts van een andere index)
-            // als regel goed is => middelste index bepalen in die update regel en ding optellen bij totaal
-
         }
 
-
         System.out.println(answer);
+        System.out.println(answer2);
+    }
+
+    private static Comparator<Integer> getOrderingRuleComparator() {
+        return (i, j) -> {
+            for (List<Integer> rule : orderingRulesMap.values()) {
+                if (rule.get(0) == j && rule.get(1) == i) {
+                    return -1; //not sorted according to rule!
+                }
+            }
+
+            return 0;
+        };
     }
 
 
@@ -44,7 +57,7 @@ public class Day5Launcher {
     }
 
     private static void readInputAndFillMaps() {
-        List<String> inputLines = FileService.readFileLines("AdventOfCode/src/main/resources/d5.txt");
+        List<String> inputLines = FileService.readFileLines("src/main/resources/d5.txt");
         int indexUpdates = 0;
 
         for (int index = 0; index < inputLines.size(); index++) {
